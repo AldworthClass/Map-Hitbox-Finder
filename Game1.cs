@@ -14,6 +14,8 @@ namespace Map_Hitbox_Finder
         MouseState mouseState, prevMouseState;
         KeyboardState keyboardState, prevKeyboardState;
 
+        bool showHelp;
+
         Texture2D rectTexture;
 
         Rectangle window;
@@ -26,9 +28,15 @@ namespace Map_Hitbox_Finder
 
         SpriteFont instructionText;
 
-        Vector2 centerScreen;
+        // Where the camera is centered in the game world
         Vector2 viewLocation;
+        // Where in the world the mouse coordinates are
+        Vector2 mouseWorldPosition;
 
+        // Speed that you scroll around the world
+        Vector2 scrollSpeed;
+
+        // Camera offset for matrix translation
         Vector2 cameraPosition;
         Matrix cameraTransform;
 
@@ -47,8 +55,9 @@ namespace Map_Hitbox_Finder
             _graphics.PreferredBackBufferHeight = window.Height;
             _graphics.ApplyChanges();
 
-            centerScreen = window.Center.ToVector2();
-            viewLocation = centerScreen;
+            showHelp = false;
+
+            viewLocation = window.Center.ToVector2();
 
             // This should be the size of your world or background.
             worldRect = new Rectangle(0, 0, 2000, 1000);
@@ -69,6 +78,10 @@ namespace Map_Hitbox_Finder
         {
             prevMouseState = mouseState;
             mouseState = Mouse.GetState();
+
+            Matrix inverseTransform = Matrix.Invert(cameraTransform);
+            mouseWorldPosition = Vector2.Transform(mouseState.Position.ToVector2(), inverseTransform);
+
             prevKeyboardState = keyboardState;
             keyboardState = Keyboard.GetState();
 
@@ -76,27 +89,42 @@ namespace Map_Hitbox_Finder
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            // Scroll Speed
+            scrollSpeed = Vector2.Zero;
+            if (keyboardState.IsKeyDown(Keys.W))
+                scrollSpeed.Y -= 2;
+            if (keyboardState.IsKeyDown(Keys.S))
+                scrollSpeed.Y += 2;
+            if (keyboardState.IsKeyDown(Keys.A))
+                scrollSpeed.X -= 2;
+            if (keyboardState.IsKeyDown(Keys.D))
+                scrollSpeed.X += 2;
+
+            viewLocation += scrollSpeed;
+
+            SetCamera();
+
             // TODO: Add your update logic here
             // Create rectangle that is being drawn and the current one.
             if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
             {
-                currentRect = new Rectangle(mouseState.Position, new Point(0, 0));
+                currentRect = new Rectangle(mouseWorldPosition.ToPoint(), new Point(0, 0));
                 drawRect = currentRect;
             }
             else if (mouseState.LeftButton == ButtonState.Pressed)
             {
 
                 // Cursor is BELOW starting point
-                if (mouseState.Y > currentRect.Y)
+                if (mouseWorldPosition.Y > currentRect.Y)
                 {
                     drawRect.X = currentRect.X;
-                    drawRect.Height = mouseState.Y - currentRect.Y;
+                    drawRect.Height = (int)mouseWorldPosition.Y - currentRect.Y;
 
                 }
                 // Cursor is ABOVE starting point
-                else if (mouseState.Y < currentRect.Y)
+                else if (mouseWorldPosition.Y < currentRect.Y)
                 {
-                    drawRect.Y = mouseState.Y;
+                    drawRect.Y = (int)mouseWorldPosition.Y;
                     drawRect.Height = currentRect.Y - drawRect.Y;
                 }
                 else 
@@ -105,15 +133,15 @@ namespace Map_Hitbox_Finder
                 }
 
                 // Cursor is to the right of starting point
-                if (mouseState.X > currentRect.X)
+                if (mouseWorldPosition.X > currentRect.X)
                 {
                     drawRect.X = currentRect.X;
-                    drawRect.Width = mouseState.X - currentRect.X;
+                    drawRect.Width = (int)mouseWorldPosition.X - currentRect.X;
                 }
                 // Cursor is to the left of starting point
-                else if (mouseState.X < currentRect.X)
+                else if (mouseWorldPosition.X < currentRect.X)
                 {
-                    drawRect.X = mouseState.X;
+                    drawRect.X = (int)mouseWorldPosition.X;
                     drawRect.Width = currentRect.X - drawRect.X;
                 }
                 else
@@ -137,11 +165,13 @@ namespace Map_Hitbox_Finder
             {
                 for (int i = 0; i < rectangles.Count; i++)
                 {
-                    if (rectangles[i].Contains(mouseState.Position))
+                    if (rectangles[i].Contains(mouseWorldPosition.ToPoint()))
                         rectangles.RemoveAt(i);
                 }
             }
 
+
+            // Prints list of rectangles to output
             if (keyboardState.IsKeyDown(Keys.Enter) && prevKeyboardState.IsKeyUp(Keys.Enter))
             {
                 foreach (Rectangle rect in rectangles)
@@ -149,8 +179,13 @@ namespace Map_Hitbox_Finder
                 Debug.WriteLine("DONE");
             }
 
+            // Re-Centers window
+            if (keyboardState.IsKeyDown(Keys.Space) && prevKeyboardState.IsKeyUp(Keys.Space))
+            {
+                viewLocation = window.Center.ToVector2();
+            }
 
-            this.Window.Title = drawRect.ToString();
+                this.Window.Title = drawRect.ToString();
 
             base.Update(gameTime);
         }
@@ -160,14 +195,15 @@ namespace Map_Hitbox_Finder
             GraphicsDevice.Clear(Color.White);
 
             _spriteBatch.Begin(transformMatrix: cameraTransform);
+            _spriteBatch.Draw(rectTexture, drawRect, Color.Blue);
+            foreach (Rectangle rect in rectangles)
+                _spriteBatch.Draw(rectTexture, rect, Color.Black * 0.5f);
 
             _spriteBatch.End();
 
 
             _spriteBatch.Begin();
-            _spriteBatch.Draw(rectTexture, drawRect, Color.Blue);
-            foreach (Rectangle rect in rectangles) 
-                _spriteBatch.Draw(rectTexture, rect, Color.Black * 0.5f);
+            
             _spriteBatch.DrawString(instructionText, "Hit Space to center around game window", new Vector2(10, 440), Color.Black);
             _spriteBatch.DrawString(instructionText, "Use WASD to move the map around", new Vector2(10, 470), Color.Black);
             _spriteBatch.DrawString(instructionText, "With left mouse button, draw to make a barrier", new Vector2(10, 500), Color.Black);
@@ -181,7 +217,7 @@ namespace Map_Hitbox_Finder
         public void SetCamera()
         {
             // Calculates the offset between out players position and the center of the game window
-            cameraPosition = centerScreen - window.Center.ToVector2();
+            cameraPosition = viewLocation - window.Center.ToVector2();
 
             // Uses this offset to create a translation matrix that can be applied when we draw our world.
             cameraTransform = Matrix.CreateTranslation(new Vector3(-cameraPosition, 0f));
