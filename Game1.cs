@@ -16,7 +16,7 @@ namespace Map_Hitbox_Finder
 
         bool showHelp;
 
-        Texture2D rectTexture;
+        Texture2D rectTexture, rectOutlineTexture;
 
         Rectangle window;
         //Make this the size of your background/world
@@ -71,6 +71,7 @@ namespace Map_Hitbox_Finder
 
             // TODO: use this.Content to load your game content here
             rectTexture = Content.Load<Texture2D>("rectangle");
+            rectOutlineTexture = Content.Load<Texture2D>("rectangle outline");
             instructionText = Content.Load<SpriteFont>("InstructionText");
         }
 
@@ -185,7 +186,7 @@ namespace Map_Hitbox_Finder
                 viewLocation = window.Center.ToVector2();
             }
 
-                this.Window.Title = drawRect.ToString();
+            this.Window.Title = drawRect.ToString();
 
             base.Update(gameTime);
         }
@@ -195,6 +196,10 @@ namespace Map_Hitbox_Finder
             GraphicsDevice.Clear(Color.White);
 
             _spriteBatch.Begin(transformMatrix: cameraTransform);
+            // Draw your game world background/map here
+            //_spriteBatch.Draw(your background texture, worldRect, color.White);
+
+            _spriteBatch.Draw(rectOutlineTexture, window, Color.Black);
             _spriteBatch.Draw(rectTexture, drawRect, Color.Blue);
             foreach (Rectangle rect in rectangles)
                 _spriteBatch.Draw(rectTexture, rect, Color.Black * 0.5f);
