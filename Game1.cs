@@ -272,8 +272,8 @@ namespace Map_Hitbox_Finder
             cameraTransform = 
                 Matrix.CreateTranslation(new Vector3(-cameraPosition, 0f)) * // Applies offset for location
                 Matrix.CreateTranslation(   // Scaling happens relative to 0, 0 so we shift origin so scaling happens here
-                    -GraphicsDevice.Viewport.Width * -0.5f,
-                    -GraphicsDevice.Viewport.Height * -0.5f, 
+                    -GraphicsDevice.Viewport.Width * 0.5f,
+                    -GraphicsDevice.Viewport.Height * 0.5f, 
                     0) *
                 Matrix.CreateScale(zoom, zoom, 1f) *    // Applies Zoom
                 Matrix.CreateTranslation(               // Re-centers after zoom
