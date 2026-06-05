@@ -16,7 +16,7 @@ namespace Map_Hitbox_Finder
 
         bool showHelp;
 
-        Texture2D rectTexture, rectOutlineTexture;
+        Texture2D rectTexture, rectOutlineTexture, worldTexture;
 
         Rectangle window;
         //Make this the size of your background/world
@@ -71,7 +71,7 @@ namespace Map_Hitbox_Finder
             worldRect = new Rectangle(0, 0, 2000, 1000);
 
             rectangles = new List<Rectangle>();
-            instructionRect1 = new Rectangle(5, 355, 330, 150);
+            instructionRect1 = new Rectangle(5, 355, 330, 240);
             instructionRect2 = new Rectangle(5, 9, 200, 20);
             base.Initialize();
         }
@@ -82,6 +82,7 @@ namespace Map_Hitbox_Finder
 
             // TODO: use this.Content to load your game content here
             rectTexture = Content.Load<Texture2D>("rectangle");
+            //worldTexture = Content.Load<Texture2D>("filename of world texture goes here");
             rectOutlineTexture = Content.Load<Texture2D>("rectangle outline");
             instructionText = Content.Load<SpriteFont>("InstructionText");
         }
@@ -246,7 +247,7 @@ namespace Map_Hitbox_Finder
             {
                 _spriteBatch.Draw(rectTexture, instructionRect1, Color.White * 0.8f);
                 _spriteBatch.DrawString(instructionText, "Press 'I' to hide instructions", new Vector2(10, 10), Color.Black);
-                _spriteBatch.DrawString(instructionText, "Press 'Ctrl' + mouse wheel to zoom in and out", new Vector2(10, 390), Color.Black);
+                _spriteBatch.DrawString(instructionText, "Press 'Ctrl' + mouse wheel to zoom in and out", new Vector2(10, 380), Color.Black);
                 _spriteBatch.DrawString(instructionText, "Press 'Z' to undo zoom", new Vector2(10, 410), Color.Black);
                 _spriteBatch.DrawString(instructionText, "Space centers around game window", new Vector2(10, 440), Color.Black);
                 _spriteBatch.DrawString(instructionText, "Use WASD to move the map around", new Vector2(10, 470), Color.Black);
@@ -271,12 +272,12 @@ namespace Map_Hitbox_Finder
             // Uses this offset to create a translation matrix that can be applied when we draw our world.
             cameraTransform = 
                 Matrix.CreateTranslation(new Vector3(-cameraPosition, 0f)) * // Applies offset for location
-                Matrix.CreateTranslation(   // Scaling happens relative to 0, 0 so we shift origin so scaling happens here
+                Matrix.CreateTranslation(   // Scaling happens relative to (0, 0) so we shift origin so scaling happens here
                     -GraphicsDevice.Viewport.Width * 0.5f,
                     -GraphicsDevice.Viewport.Height * 0.5f, 
                     0) *
                 Matrix.CreateScale(zoom, zoom, 1f) *    // Applies Zoom
-                Matrix.CreateTranslation(               // Re-centers after zoom
+                Matrix.CreateTranslation(               // Re-centers after translate/scale
                     GraphicsDevice.Viewport.Width * 0.5f,
                     GraphicsDevice.Viewport.Height * 0.5f,
                     0);
