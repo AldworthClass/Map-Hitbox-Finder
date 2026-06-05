@@ -45,6 +45,7 @@ namespace Map_Hitbox_Finder
         Vector2 cameraPosition;
         Matrix cameraTransform;
 
+        //float zoom;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -54,18 +55,21 @@ namespace Map_Hitbox_Finder
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+           
+            // Set this size to match your game window
             window = new Rectangle(0, 0, 800, 600);
             _graphics.PreferredBackBufferWidth = window.Width;
             _graphics.PreferredBackBufferHeight = window.Height;
             _graphics.ApplyChanges();
 
+            //zoom = 1f;
             showHelp = false;
 
             viewLocation = window.Center.ToVector2();
 
-            // This should be the size of your world or background.
+            // This should be the size of your world or background.  It may be the same size of your game window.
             worldRect = new Rectangle(0, 0, 2000, 1000);
+
             rectangles = new List<Rectangle>();
             instructionRect1 = new Rectangle(5, 435, 330, 150);
             instructionRect2 = new Rectangle(5, 9, 200, 20);
@@ -207,6 +211,7 @@ namespace Map_Hitbox_Finder
             GraphicsDevice.Clear(Color.White);
 
             _spriteBatch.Begin(transformMatrix: cameraTransform);
+
             // Draw your game world background/map here
             //_spriteBatch.Draw(your background texture, worldRect, color.White);
 
