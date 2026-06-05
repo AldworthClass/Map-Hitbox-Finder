@@ -6,7 +6,7 @@ Simply clone or download the program, and open in in Visual Studio.
 You may need to change the target framework if you have a newer version of VS.
 
 ## Usage
-<u>SETUP</u>
+<ins>SETUP</ins>
 
 1 - Open up this solution in Visual Studio (or another IDE of your choice).  
 2 - Use the MGCB tool to add your game map/background image (if you have one).  
@@ -17,7 +17,7 @@ You may need to change the target framework if you have a newer version of VS.
   -You may scale 'window' to the size that you want your game window to be as well.  
 7 - Draw your background image using the included _spriteBatch.Draw().  
 
-<u>USE PROGRAM</u>
+<ins>USE PROGRAM</ins>
 
 In game, press 'I' to toggle instructions on/off.
 
