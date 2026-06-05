@@ -14,8 +14,8 @@ You may need to change the target framework if you have a newer version of VS.
 4 - In LoadContent(), load your gameworld texture into 'worldTexture' (uncomment out the line of code to do this).  
 5 - In Draw(), uncomment out the line of code that draws the world texture (scaled to worldRect).  
 6 - Set the Rectangle 'worldRect' to the size you want your game world to be.  
-  -You may scale 'window' to the size that you want your game window to be as well.  
-7 - Draw your background image using the included _spriteBatch.Draw().  
+7 -You may scale 'window' to the size that you want your game window to be as well.  
+8 - Draw your background image using the included _spriteBatch.Draw().  
 
 <ins>USE PROGRAM</ins>
 
