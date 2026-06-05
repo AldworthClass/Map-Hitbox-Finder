@@ -45,7 +45,7 @@ namespace Map_Hitbox_Finder
         Vector2 cameraPosition;
         Matrix cameraTransform;
 
-        //float zoom;
+        float zoom;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -62,7 +62,7 @@ namespace Map_Hitbox_Finder
             _graphics.PreferredBackBufferHeight = window.Height;
             _graphics.ApplyChanges();
 
-            //zoom = 1f;
+            zoom = 1f;
             showHelp = false;
 
             viewLocation = window.Center.ToVector2();
@@ -97,6 +97,18 @@ namespace Map_Hitbox_Finder
 
             prevKeyboardState = keyboardState;
             keyboardState = Keyboard.GetState();
+
+
+            if (keyboardState.IsKeyDown(Keys.LeftControl) && mouseState.ScrollWheelValue > prevMouseState.ScrollWheelValue)
+            {
+                zoom += 0.05f; // zoom in
+            }
+            if (keyboardState.IsKeyDown(Keys.LeftControl) && mouseState.ScrollWheelValue < prevMouseState.ScrollWheelValue)
+            {
+                zoom -= 0.05f; // zoom out
+            }
+            zoom = MathHelper.Clamp(zoom, 0.22f, 5f);
+
 
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -195,9 +207,14 @@ namespace Map_Hitbox_Finder
                 viewLocation = window.Center.ToVector2();
             }
 
+            if (keyboardState.IsKeyDown(Keys.Z) && prevKeyboardState.IsKeyUp(Keys.Z))
+            {
+                zoom = 1f;
+            }
+
             // Toggles instructions
             if (keyboardState.IsKeyDown(Keys.I) && prevKeyboardState.IsKeyUp(Keys.I))
-                showHelp = !showHelp;
+            showHelp = !showHelp;
 
 
 
@@ -250,7 +267,18 @@ namespace Map_Hitbox_Finder
             cameraPosition = viewLocation - window.Center.ToVector2();
 
             // Uses this offset to create a translation matrix that can be applied when we draw our world.
-            cameraTransform = Matrix.CreateTranslation(new Vector3(-cameraPosition, 0f));
+            cameraTransform = 
+                Matrix.CreateTranslation(new Vector3(-cameraPosition, 0f)) * // Applies offset for location
+                Matrix.CreateTranslation(   // Scaling happens relative to 0, 0 so we shift origin so scaling happens here
+                    -GraphicsDevice.Viewport.Width * -0.5f,
+                    -GraphicsDevice.Viewport.Height * -0.5f, 
+                    0) *
+                Matrix.CreateScale(zoom, zoom, 1f) *    // Applies Zoom
+                Matrix.CreateTranslation(               // Re-centers after zoom
+                    GraphicsDevice.Viewport.Width * 0.5f,
+                    GraphicsDevice.Viewport.Height * 0.5f,
+                    0);
+            
         }
 
     }
