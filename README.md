@@ -6,7 +6,7 @@ Simply clone or download the program, and open in in Visual Studio.
 You may need to change the target framework if you have a newer version of VS.
 
 ## Usage
-SETUP
+<u>SETUP</u>
 
 1 - Open up this solution in Visual Studio (or another IDE of your choice).  
 2 - Use the MGCB tool to add your game map/background image (if you have one).  
@@ -17,15 +17,15 @@ SETUP
   -You may scale 'window' to the size that you want your game window to be as well.  
 7 - Draw your background image using the included _spriteBatch.Draw().  
 
-USE PROGRAM
+<u>USE PROGRAM</u>
 
 In game, press 'I' to toggle instructions on/off.
 
-1 - Run the program.
-2 - Left click and drag to create rectangles on your map where you want them to be.
-3 - Right click on a rectangle to delete it.
-4 - Use WASD to pan the map around.
-5 - Hit Spacebar to bring game window back to origin.
-6 - Hold left 'Ctrl' and scroll mouse wheel to zoom in/out.
-7 - Press 'Z' to return to normal zoom.
-8 - Press 'ENTER' to print the list of rectangles to the output console.
+1 - Run the program.  
+2 - Left click and drag to create rectangles on your map where you want them to be.  
+3 - Right click on a rectangle to delete it.  
+4 - Use WASD to pan the map around.  
+5 - Hit Spacebar to bring game window back to origin.  
+6 - Hold left 'Ctrl' and scroll mouse wheel to zoom in/out.  
+7 - Press 'Z' to return to normal zoom.  
+8 - Press 'ENTER' to print the list of rectangles to the output console.  
