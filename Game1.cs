@@ -71,7 +71,7 @@ namespace Map_Hitbox_Finder
             worldRect = new Rectangle(0, 0, 2000, 1000);
 
             rectangles = new List<Rectangle>();
-            instructionRect1 = new Rectangle(5, 435, 330, 150);
+            instructionRect1 = new Rectangle(5, 355, 330, 150);
             instructionRect2 = new Rectangle(5, 9, 200, 20);
             base.Initialize();
         }
@@ -246,6 +246,8 @@ namespace Map_Hitbox_Finder
             {
                 _spriteBatch.Draw(rectTexture, instructionRect1, Color.White * 0.8f);
                 _spriteBatch.DrawString(instructionText, "Press 'I' to hide instructions", new Vector2(10, 10), Color.Black);
+                _spriteBatch.DrawString(instructionText, "Press 'Ctrl' + mouse wheel to zoom in and out", new Vector2(10, 390), Color.Black);
+                _spriteBatch.DrawString(instructionText, "Press 'Z' to undo zoom", new Vector2(10, 410), Color.Black);
                 _spriteBatch.DrawString(instructionText, "Space centers around game window", new Vector2(10, 440), Color.Black);
                 _spriteBatch.DrawString(instructionText, "Use WASD to move the map around", new Vector2(10, 470), Color.Black);
                 _spriteBatch.DrawString(instructionText, "Drag with left mouse button to make a barrier", new Vector2(10, 500), Color.Black);
