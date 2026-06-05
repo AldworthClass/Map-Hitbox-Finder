@@ -22,15 +22,20 @@ namespace Map_Hitbox_Finder
         //Make this the size of your background/world
         Rectangle worldRect;
 
-        Rectangle currentRect, drawRect;
+        // Stores initial point where rectangle is created
+        Vector2 rectStart;
+        // Stores rectangle that is being drawn as it is created
+        Rectangle drawRect;
+        // Stores all created rectangles
         List<Rectangle> rectangles;
 
 
         SpriteFont instructionText;
+        Rectangle instructionRect1, instructionRect2;
 
         // Where the camera is centered in the game world
         Vector2 viewLocation;
-        // Where in the world the mouse coordinates are
+        // Where the in world the mouse coordinates are
         Vector2 mouseWorldPosition;
 
         // Speed that you scroll around the world
@@ -62,6 +67,8 @@ namespace Map_Hitbox_Finder
             // This should be the size of your world or background.
             worldRect = new Rectangle(0, 0, 2000, 1000);
             rectangles = new List<Rectangle>();
+            instructionRect1 = new Rectangle(5, 435, 330, 150);
+            instructionRect2 = new Rectangle(5, 9, 200, 20);
             base.Initialize();
         }
 
@@ -80,6 +87,7 @@ namespace Map_Hitbox_Finder
             prevMouseState = mouseState;
             mouseState = Mouse.GetState();
 
+            // Converts game window mouse coordinate to game world mouse coordinate
             Matrix inverseTransform = Matrix.Invert(cameraTransform);
             mouseWorldPosition = Vector2.Transform(mouseState.Position.ToVector2(), inverseTransform);
 
@@ -90,74 +98,71 @@ namespace Map_Hitbox_Finder
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // Scroll Speed
+            // Determines scroll Speed
             scrollSpeed = Vector2.Zero;
             if (keyboardState.IsKeyDown(Keys.W))
-                scrollSpeed.Y -= 2;
+                scrollSpeed.Y -= 5;
             if (keyboardState.IsKeyDown(Keys.S))
-                scrollSpeed.Y += 2;
+                scrollSpeed.Y += 5;
             if (keyboardState.IsKeyDown(Keys.A))
-                scrollSpeed.X -= 2;
+                scrollSpeed.X -= 5;
             if (keyboardState.IsKeyDown(Keys.D))
-                scrollSpeed.X += 2;
+                scrollSpeed.X += 5;
 
             viewLocation += scrollSpeed;
+            SetCamera();    // Determines translation matrix
 
-            SetCamera();
-
-            // TODO: Add your update logic here
-            // Create rectangle that is being drawn and the current one.
+            // Detects left click to create a rectangle
             if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
             {
-                currentRect = new Rectangle(mouseWorldPosition.ToPoint(), new Point(0, 0));
-                drawRect = currentRect;
+                rectStart = mouseWorldPosition;
+                drawRect = new Rectangle(rectStart.ToPoint(), new Point(0, 0));
             }
+            // Scales created rectangle when user drags corner
             else if (mouseState.LeftButton == ButtonState.Pressed)
             {
-
                 // Cursor is BELOW starting point
-                if (mouseWorldPosition.Y > currentRect.Y)
+                if (mouseWorldPosition.Y > rectStart.Y)
                 {
-                    drawRect.X = currentRect.X;
-                    drawRect.Height = (int)mouseWorldPosition.Y - currentRect.Y;
+                    drawRect.X = (int)rectStart.X;
+                    drawRect.Height = (int)mouseWorldPosition.Y - (int)rectStart.Y;
 
                 }
                 // Cursor is ABOVE starting point
-                else if (mouseWorldPosition.Y < currentRect.Y)
+                else if (mouseWorldPosition.Y < rectStart.Y)
                 {
                     drawRect.Y = (int)mouseWorldPosition.Y;
-                    drawRect.Height = currentRect.Y - drawRect.Y;
+                    drawRect.Height = (int)rectStart.Y - drawRect.Y;
                 }
-                else 
+                else // Cursor is horizontal to starting point
                 {
                     drawRect.Height = 0;
                 }
 
                 // Cursor is to the right of starting point
-                if (mouseWorldPosition.X > currentRect.X)
+                if (mouseWorldPosition.X > rectStart.X)
                 {
-                    drawRect.X = currentRect.X;
-                    drawRect.Width = (int)mouseWorldPosition.X - currentRect.X;
+                    drawRect.X = (int)rectStart.X;
+                    drawRect.Width = (int)mouseWorldPosition.X - (int)rectStart.X;
                 }
                 // Cursor is to the left of starting point
-                else if (mouseWorldPosition.X < currentRect.X)
+                else if (mouseWorldPosition.X < rectStart.X)
                 {
                     drawRect.X = (int)mouseWorldPosition.X;
-                    drawRect.Width = currentRect.X - drawRect.X;
+                    drawRect.Width = (int)rectStart.X - drawRect.X;
                 }
-                else
+                else // Cursor is vertical to starting point
                 {
                     drawRect.Width = 0;
                 }
 
             }
-            // User releases the mouse
+            // User releases the mouse (rectangle added to list)
             else if (mouseState.LeftButton == ButtonState.Released && prevMouseState.LeftButton == ButtonState.Pressed)
             {
-                currentRect = drawRect;
-                if (currentRect.Width != 0 && currentRect.Height != 0) 
-                    rectangles.Add(currentRect);
-                currentRect = Rectangle.Empty;
+                if (drawRect.Width != 0 && drawRect.Height != 0) 
+                    rectangles.Add(drawRect);
+                rectStart = Vector2.Zero;
                 drawRect = Rectangle.Empty;
             }
 
@@ -186,7 +191,13 @@ namespace Map_Hitbox_Finder
                 viewLocation = window.Center.ToVector2();
             }
 
-            this.Window.Title = drawRect.ToString();
+            // Toggles instructions
+            if (keyboardState.IsKeyDown(Keys.I) && prevKeyboardState.IsKeyUp(Keys.I))
+                showHelp = !showHelp;
+
+
+
+                this.Window.Title = drawRect.ToString();
 
             base.Update(gameTime);
         }
@@ -208,12 +219,21 @@ namespace Map_Hitbox_Finder
 
 
             _spriteBatch.Begin();
-            
-            _spriteBatch.DrawString(instructionText, "Hit Space to center around game window", new Vector2(10, 440), Color.Black);
-            _spriteBatch.DrawString(instructionText, "Use WASD to move the map around", new Vector2(10, 470), Color.Black);
-            _spriteBatch.DrawString(instructionText, "With left mouse button, draw to make a barrier", new Vector2(10, 500), Color.Black);
-            _spriteBatch.DrawString(instructionText, "Right Click removes barrier", new Vector2(10, 530), Color.Black);
-            _spriteBatch.DrawString(instructionText, "Enter prints Rectangles to Debug", new Vector2(10, 560), Color.Black);
+            _spriteBatch.Draw(rectTexture, instructionRect2, Color.White * 0.8f);
+            if (showHelp)
+            {
+                _spriteBatch.Draw(rectTexture, instructionRect1, Color.White * 0.8f);
+                _spriteBatch.DrawString(instructionText, "Press 'I' to hide instructions", new Vector2(10, 10), Color.Black);
+                _spriteBatch.DrawString(instructionText, "Space centers around game window", new Vector2(10, 440), Color.Black);
+                _spriteBatch.DrawString(instructionText, "Use WASD to move the map around", new Vector2(10, 470), Color.Black);
+                _spriteBatch.DrawString(instructionText, "Drag with left mouse button to make a barrier", new Vector2(10, 500), Color.Black);
+                _spriteBatch.DrawString(instructionText, "Right-Click to remove a barrier", new Vector2(10, 530), Color.Black);
+                _spriteBatch.DrawString(instructionText, "Enter to Rectangles to output", new Vector2(10, 560), Color.Black);
+            }
+            else
+                _spriteBatch.DrawString(instructionText, "Press 'I' for instructions", new Vector2(10, 10), Color.Black);
+
+
             _spriteBatch.End();
 
             base.Draw(gameTime);
