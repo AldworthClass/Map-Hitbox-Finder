@@ -55,8 +55,11 @@ namespace Map_Hitbox_Finder
 
         protected override void Initialize()
         {
-           
-            // Set this size to match your game window
+            // Set 'worldRect' to be the size of your game world.
+            // It may be the same size of your game window.
+            worldRect = new Rectangle(0, 0, 2000, 1000);
+
+            // Set 'window' size to match your game window
             window = new Rectangle(0, 0, 800, 600);
             _graphics.PreferredBackBufferWidth = window.Width;
             _graphics.PreferredBackBufferHeight = window.Height;
@@ -67,8 +70,7 @@ namespace Map_Hitbox_Finder
 
             viewLocation = window.Center.ToVector2();
 
-            // This should be the size of your world or background.  It may be the same size of your game window.
-            worldRect = new Rectangle(0, 0, 2000, 1000);
+            
 
             rectangles = new List<Rectangle>();
             instructionRect1 = new Rectangle(5, 355, 330, 240);
@@ -231,7 +233,7 @@ namespace Map_Hitbox_Finder
             _spriteBatch.Begin(transformMatrix: cameraTransform);
 
             // Draw your game world background/map here
-            //_spriteBatch.Draw(your background texture, worldRect, color.White);
+            //_spriteBatch.Draw(worldTexture, worldRect, color.White);
 
             _spriteBatch.Draw(rectOutlineTexture, window, Color.Black);
             _spriteBatch.Draw(rectTexture, drawRect, Color.Blue);
