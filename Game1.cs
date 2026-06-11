@@ -191,7 +191,10 @@ namespace Map_Hitbox_Finder
                 for (int i = 0; i < rectangles.Count; i++)
                 {
                     if (rectangles[i].Contains(mouseWorldPosition.ToPoint()))
+                    {
                         rectangles.RemoveAt(i);
+                        i--;
+                    }
                 }
             }
 
