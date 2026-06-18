@@ -9,13 +9,12 @@ You may need to change the target framework if you have a newer version of VS.
 <ins>SETUP</ins>
 
 1 - Open up this solution in Visual Studio (or another IDE of your choice).  
-2 - Use the MGCB tool to add your game map/background image (if you have one).  
+2 - Use the MGCB tool to add your game map/background image (if you have one).  See troubleshooting if MGCB tool doesn't open.
 3 - Open Game1.cs in the Solution Explorer.  
 4 - In LoadContent(), load your gameworld texture into 'worldTexture' (uncomment out the line of code to do this).  
-5 - In Draw(), uncomment out the line of code that draws the world texture (scaled to worldRect).  
-6 - Set the Rectangle 'worldRect' to the size you want your game world to be.  
-7 -You may scale 'window' to the size that you want your game window to be as well.  
-8 - Draw your background image using the included _spriteBatch.Draw().  
+5 - In Initialize() Set the Rectangle 'worldRect' to the size you want your game world to be.  
+6 - In Initialize() Scale 'window' to the size that your game window will be (may be the same as worldRect).  
+7 - In Draw(), uncomment out the line of code that draws the world texture (scaled to worldRect).  
 
 <ins>USE PROGRAM</ins>
 
@@ -36,6 +35,6 @@ In game, press 'I' to toggle instructions on/off.
 If you can't open the MGCB tool, you are likley using a newer version of Monogame than I used when making this program.  To fix this:
 
 1 - Go to the "Project" menu.  
-2 - Select Map Hitbox Finder Properties.  
-3 - In the Application-General section, under Target Framework, select the framework you have installed.  
-4 - Close the properties window, save your project, close it, re-open it, try running it once, and try opening the MGCB tool again.  
+2 - Select Map "Hitbox Finder Properties".  
+3 - In the "Application-General" section, under "Target Framework", select the framework you have installed.  
+4 - Close the properties window, save your project, close it, re-open it, run it once, and try opening the MGCB tool again.  
