@@ -25,11 +25,11 @@ In game, press 'I' to toggle instructions on/off.
 2 - Left click and drag to create rectangles on your map where you want them to be.  
 3 - Right click on a rectangle to delete it. 
 4 - Change color: B=Black, Y=Yellow, R=Red, G=Green
-4 - Use WASD to pan the map around.  
-5 - Hit Spacebar to bring game window back to origin.  
-6 - Hold left 'Ctrl' and scroll mouse wheel to zoom in/out.  
-7 - Press 'Z' to return to normal zoom.  
-8 - Press 'ENTER' to print the list of rectangles to the output console.  
+5 - Use WASD to pan the map around.  
+6 - Hit Spacebar to bring game window back to origin.  
+7 - Hold left 'Ctrl' and scroll mouse wheel to zoom in/out.  
+8 - Press 'Z' to return to normal zoom.  
+9 - Press 'ENTER' to print the list of rectangles to the output console.  
 
 ## Troubleshooting
 If you can't open the MGCB tool, you are likley using a newer version of Monogame than I used when making this program.  To fix this:
