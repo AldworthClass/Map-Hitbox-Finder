@@ -33,6 +33,7 @@ In game, press 'I' to toggle instructions on/off.
 
 ## Troubleshooting
 If you can't open the MGCB tool, you are likley using a newer version of Monogame than I used when making this program.  To fix this:
+
 1 - Go to the "Project" menu
 2 - Select Map Hitbox Finder Properties
 3 - In the Application-General section, under Target Framework, select the framework you have installed
