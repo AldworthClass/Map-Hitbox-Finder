@@ -24,7 +24,7 @@ In game, press 'I' to toggle instructions on/off.
 1 - Run the program.  
 2 - Left click and drag to create rectangles on your map where you want them to be.  
 3 - Right click on a rectangle to delete it. 
-4 - Change color: B=Black, Y=Yellow, R=Red, G=Green
+4 - Change color: B=Black, Y=Yellow, R=Red, G=Green  
 5 - Use WASD to pan the map around.  
 6 - Hit Spacebar to bring game window back to origin.  
 7 - Hold left 'Ctrl' and scroll mouse wheel to zoom in/out.  
@@ -34,7 +34,7 @@ In game, press 'I' to toggle instructions on/off.
 ## Troubleshooting
 If you can't open the MGCB tool, you are likley using a newer version of Monogame than I used when making this program.  To fix this:
 
-1 - Go to the "Project" menu
-2 - Select Map Hitbox Finder Properties
-3 - In the Application-General section, under Target Framework, select the framework you have installed
-4 - Close the properties window, save your project, close it, re-open it, try running it once, and try opening the MGCB tool again.
+1 - Go to the "Project" menu.  
+2 - Select Map Hitbox Finder Properties.  
+3 - In the Application-General section, under Target Framework, select the framework you have installed.  
+4 - Close the properties window, save your project, close it, re-open it, try running it once, and try opening the MGCB tool again.  
