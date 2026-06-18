@@ -28,7 +28,7 @@ namespace Map_Hitbox_Finder
         Rectangle drawRect;
         // Stores all created rectangles
         List<Rectangle> rectangles;
-
+        Color color;
 
         SpriteFont instructionText;
         Rectangle instructionRect1, instructionRect2;
@@ -70,7 +70,7 @@ namespace Map_Hitbox_Finder
 
             viewLocation = window.Center.ToVector2();
 
-            
+            color = Color.Black;
 
             rectangles = new List<Rectangle>();
             instructionRect1 = new Rectangle(5, 355, 330, 240);
@@ -198,6 +198,23 @@ namespace Map_Hitbox_Finder
                 }
             }
 
+            // Changes color of rectangles
+            if (keyboardState.IsKeyDown(Keys.B))
+            {
+                color = Color.Black;
+            }
+            if (keyboardState.IsKeyDown(Keys.Y))
+            {
+                color = Color.Yellow;
+            }
+            if (keyboardState.IsKeyDown(Keys.R))
+            {
+                color = Color.Red;
+            }
+            if (keyboardState.IsKeyDown(Keys.G))
+            {
+                color = Color.Green;
+            }
 
             // Prints list of rectangles to output
             if (keyboardState.IsKeyDown(Keys.Enter) && prevKeyboardState.IsKeyUp(Keys.Enter))
@@ -236,12 +253,12 @@ namespace Map_Hitbox_Finder
             _spriteBatch.Begin(transformMatrix: cameraTransform);
 
             // Draw your game world background/map here
-            //_spriteBatch.Draw(worldTexture, worldRect, color.White);
+            //_spriteBatch.Draw(worldTexture, worldRect, Color.White);
 
             _spriteBatch.Draw(rectOutlineTexture, window, Color.Black);
             _spriteBatch.Draw(rectTexture, drawRect, Color.Blue);
             foreach (Rectangle rect in rectangles)
-                _spriteBatch.Draw(rectTexture, rect, Color.Black * 0.5f);
+                _spriteBatch.Draw(rectTexture, rect, color * 0.6f);
 
             _spriteBatch.End();
 
@@ -252,13 +269,14 @@ namespace Map_Hitbox_Finder
             {
                 _spriteBatch.Draw(rectTexture, instructionRect1, Color.White * 0.8f);
                 _spriteBatch.DrawString(instructionText, "Press 'I' to hide instructions", new Vector2(10, 10), Color.Black);
-                _spriteBatch.DrawString(instructionText, "Press 'Ctrl' + mouse wheel to zoom in and out", new Vector2(10, 380), Color.Black);
-                _spriteBatch.DrawString(instructionText, "Press 'Z' to undo zoom", new Vector2(10, 410), Color.Black);
-                _spriteBatch.DrawString(instructionText, "Space centers around game window", new Vector2(10, 440), Color.Black);
-                _spriteBatch.DrawString(instructionText, "Use WASD to move the map around", new Vector2(10, 470), Color.Black);
-                _spriteBatch.DrawString(instructionText, "Drag with left mouse button to make a barrier", new Vector2(10, 500), Color.Black);
-                _spriteBatch.DrawString(instructionText, "Right-Click to remove a barrier", new Vector2(10, 530), Color.Black);
-                _spriteBatch.DrawString(instructionText, "Enter to Rectangles to output", new Vector2(10, 560), Color.Black);
+                _spriteBatch.DrawString(instructionText, "Press 'Ctrl' + mouse wheel to zoom in and out", new Vector2(10, 360), Color.Black);
+                _spriteBatch.DrawString(instructionText, "Press 'Z' to undo zoom", new Vector2(10, 390), Color.Black);
+                _spriteBatch.DrawString(instructionText, "Space centers around game window", new Vector2(10, 420), Color.Black);
+                _spriteBatch.DrawString(instructionText, "Use WASD to move the map around", new Vector2(10, 450), Color.Black);
+                _spriteBatch.DrawString(instructionText, "Drag with left mouse button to make a barrier", new Vector2(10, 480), Color.Black);
+                _spriteBatch.DrawString(instructionText, "Right-Click to remove a barrier", new Vector2(10, 510), Color.Black);
+                _spriteBatch.DrawString(instructionText, "Enter to Rectangles to output", new Vector2(10, 540), Color.Black);
+                _spriteBatch.DrawString(instructionText, "Change Color: B - Black, Y - Yellow, R - Red, G - Green", new Vector2(10, 570), Color.Black);
             }
             else
                 _spriteBatch.DrawString(instructionText, "Press 'I' for instructions", new Vector2(10, 10), Color.Black);
