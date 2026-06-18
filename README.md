@@ -32,6 +32,7 @@ In game, press 'I' to toggle instructions on/off.
 9 - Press 'ENTER' to print the list of rectangles to the output console.  
 
 ## Troubleshooting
+
 If you can't open the MGCB tool, you are likley using a newer version of Monogame than I used when making this program.  To fix this:
 
 1 - Go to the "Project" menu.  
